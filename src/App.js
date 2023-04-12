@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { getTwitterRequestToken } from './twitter';
 
-function App() {
+const App = () => {
+  const handleClick = async () => {
+    try {
+      const { token, token_secret } = await getTwitterRequestToken();
+      const redirect_uri = encodeURIComponent('http://localhost:3000/callback');
+      window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${token}&oauth_callback=${redirect_uri}`;
+    } catch (err) {
+      console.error('Error:', err);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <button onClick={handleClick}>Sign in with Twitter</button>
   );
-}
+};
 
 export default App;
